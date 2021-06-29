@@ -4,6 +4,15 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 
+interface IFormInputs {
+  firstName: string;
+  lastName: string;
+  email: string;
+  age: number;
+  password: string;
+  confirmPassword: string;
+}
+
 const schema = yup.object().shape({
   firstName: yup.string().required(),
   lastName: yup.string().required(),
@@ -13,22 +22,19 @@ const schema = yup.object().shape({
   confirmPassword: yup.string().oneOf([yup.ref("password"), null]),
 });
 
-function App() {
+export default function App() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<IFormInputs>({
     resolver: yupResolver(schema),
   });
 
-  const submitHandler = (data: any) => {
+  const submitHandler = (data: IFormInputs) => {
     console.log(data);
   };
 
-  const inputEvents = register("firstName");
-
-  console.log(inputEvents);
   return (
     <div className="main">
       <div className="Form">
@@ -41,7 +47,7 @@ function App() {
               placeholder="firstName"
               {...register("firstName")}
             />
-            <p>{errors.firstName?.message}</p>
+            <p>{errors.firstName && "something that i wont)"}</p>
             <input
               type="text"
               id="lastName"
@@ -84,5 +90,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
